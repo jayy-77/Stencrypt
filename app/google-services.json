@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "930497363790",
+    "project_id": "stencrypt",
+    "storage_bucket": "stencrypt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930497363790:android:bd84f6f1b48eb7f5c4281f",
+        "android_client_info": {
+          "package_name": "com.example.stencrypt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930497363790-s3mrc26iv7a7phnd48pkfmqklglsvau2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stencrypt",
+            "certificate_hash": "cc0265c14a2bef8b6a37aad3c0ef687ab8d28fce"
+          }
+        },
+        {
+          "client_id": "930497363790-083pthi540o5bsbq823283lkvkcipo7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi8d2969c_-pEV0Fg-fpO2i3cy0-znze8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930497363790-083pthi540o5bsbq823283lkvkcipo7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
