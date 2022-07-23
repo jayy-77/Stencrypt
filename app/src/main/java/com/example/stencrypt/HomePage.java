@@ -1,25 +1,15 @@
 package com.example.stencrypt;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -51,8 +41,9 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(bool == true){
-                    frag = new HomeFragment();
+                    frag = new HomeFragment(RESULT_OK, getContentResolver());
                     menuAlternateSetting();
+                    userProfile.setImageResource(R.drawable.person);
                     getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,frag,"").commit();
                 }else{
                     Toast.makeText(getApplicationContext(), "network", Toast.LENGTH_SHORT).show();
@@ -60,7 +51,7 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        frag = new HomeFragment();
+        frag = new HomeFragment(RESULT_OK, getContentResolver());
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,frag,"").commit();
 
 

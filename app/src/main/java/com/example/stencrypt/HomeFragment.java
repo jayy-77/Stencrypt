@@ -1,5 +1,7 @@
 package com.example.stencrypt;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,8 +21,14 @@ public class HomeFragment extends Fragment {
     SeekBar sliderEncodeDecode;
     Fragment frag;
     String fragmentName;
+    int resultOk;
+    ContentResolver contentResolver;
+    Context applicationContext;
 
-    public HomeFragment() {
+    public HomeFragment(int resultOk, ContentResolver contentResolver) {
+        this.resultOk = resultOk;
+        this.contentResolver = contentResolver;
+        this.applicationContext = applicationContext;
     }
 
 
@@ -43,7 +51,7 @@ public class HomeFragment extends Fragment {
 //               Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
                 if(i>57 ){
                     encode.setImageResource(R.drawable.round_encode_green);
-                    EncodeFragment encodeFragment = new EncodeFragment();
+                    EncodeFragment encodeFragment = new EncodeFragment(resultOk, contentResolver, applicationContext);
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.flFragment, encodeFragment);
@@ -57,7 +65,7 @@ public class HomeFragment extends Fragment {
                 }
                 if(i<43 ){
                     decode.setImageResource(R.drawable.round_encode_green);
-                    DecodeFragment decodeFragment = new DecodeFragment();
+                    DecodeFragment decodeFragment = new DecodeFragment(resultOk,contentResolver);
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.flFragment, decodeFragment);

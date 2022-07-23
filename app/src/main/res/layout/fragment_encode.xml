@@ -1,15 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:background="#100070"
     tools:context=".EncodeFragment">
-
-    <TextView
-        android:gravity="center"
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/iv_encode"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Helllow" />
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="#F2B8B5"
+        android:layout_margin="10dp"
+        app:boxBackgroundColor="#221F1E"
+        android:textColorHint="#F2B8B5"
+        android:backgroundTint="#221F1E"
 
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="@string/label">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/message_et"
+            android:layout_width="match_parent"
+            android:textColor="#F2B8B5"
+            android:backgroundTint="#221F1E"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="#F2B8B5"
+        android:layout_margin="10dp"
+        app:boxBackgroundColor="#221F1E"
+        android:textColorHint="#F2B8B5"
+        android:backgroundTint="#221F1E"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="@string/label">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/key_et"
+            android:layout_width="match_parent"
+            android:textColor="#F2B8B5"
+            android:backgroundTint="#221F1E"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+<Button
+    android:id="@+id/btn_choose"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Select image"/>
+    <Button
+        android:id="@+id/btn_encode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="encode image"/>
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="save image"/>
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textColor="#F2B8B5"
+    android:id="@+id/logT"/>
 </LinearLayout>
