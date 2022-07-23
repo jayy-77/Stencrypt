@@ -42,17 +42,14 @@ import java.util.List;
 public class EncodeFragment extends Fragment implements TextEncodingCallback {
     private static final int SELECT_PICTURE = 100;
     private static final String TAG = "Encode Class";
-    //Created variables for UI
     private TextView whether_encoded;
     private ImageView imageView;
     private EditText message;
     private EditText secret_key;
-    //Objects needed for encoding
     private TextEncoding textEncoding;
     private ImageSteganography imageSteganography;
     private ProgressDialog save;
     private Uri filepath;
-    //Bitmaps
     private Bitmap original_image;
     private Bitmap encoded_image;
     int resultOk;
@@ -82,7 +79,6 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         checkAndRequestPermissions();
 
 
-        //Choose image button
         choose_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +86,6 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
             }
         });
 
-        //Encode Button
         encode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,20 +93,16 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
                 if (filepath != null) {
                     if (message.getText() != null) {
 
-                        //ImageSteganography Object instantiation
                         imageSteganography = new ImageSteganography(message.getText().toString(),
                                 secret_key.getText().toString(),
                                 original_image);
-                        //TextEncoding object Instantiation
                         textEncoding = new TextEncoding(getActivity(),EncodeFragment.this);
-                        //Executing the encoding
                         textEncoding.execute(imageSteganography);
                     }
                 }
             }
         });
 
-        //Save image button
         save_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +141,6 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //Image set to imageView
         if (requestCode == SELECT_PICTURE && resultCode == resultOk && data != null && data.getData() != null) {
 
             filepath = data.getData();
@@ -165,17 +155,14 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
 
     }
 
-    // Override method of TextEncodingCallback
 
     @Override
     public void onStartTextEncoding() {
-        //Whatever you want to do at the start of text encoding
     }
 
     @Override
     public void onCompleteTextEncoding(ImageSteganography result) {
 
-        //By the end of textEncoding
 
         if (result != null && result.isEncoded()) {
             encoded_image = result.getEncoded_image();

@@ -31,7 +31,6 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
 
     private static final int SELECT_PICTURE = 100;
     private static final String TAG = "Decode Class";
-    //Initializing the UI components
     private TextView textView;
     private ImageView imageView;
     private EditText message;
@@ -41,7 +40,6 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
     ContentResolver contentResolver;
 
 
-    //Bitmap
     private Bitmap original_image;
     public DecodeFragment(int resultOk, ContentResolver contentResolver) {
         this.resultOk = resultOk;
@@ -60,7 +58,6 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
         Button choose_image_button = view.findViewById(R.id.btn_choose_dc);
         Button decode_button = view.findViewById(R.id.btn_encode_dc);
 
-        //Choose Image Button
         choose_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,20 +65,16 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
             }
         });
 
-        //Decode Button
         decode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (filepath != null) {
 
-                    //Making the ImageSteganography object
                     ImageSteganography imageSteganography = new ImageSteganography(secret_key.getText().toString(),
                             original_image);
 
-                    //Making the TextDecoding object
                     TextDecoding textDecoding = new TextDecoding(getActivity(),DecodeFragment.this);
 
-                    //Execute Task
                     textDecoding.execute(imageSteganography);
                 }
             }
