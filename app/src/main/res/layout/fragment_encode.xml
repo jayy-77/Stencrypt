@@ -22,12 +22,13 @@
         android:backgroundTint="#221F1E"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="@string/label">
+        android:hint="Key">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/message_et"
             android:layout_width="match_parent"
             android:textColor="#F2B8B5"
+            android:hint="Key"
             android:backgroundTint="#221F1E"
             android:layout_height="wrap_content"
             />
@@ -76,4 +77,11 @@
     android:layout_height="match_parent"
     android:textColor="#F2B8B5"
     android:id="@+id/logT"/>
+    <include
+        android:id="@+id/bottom_sheet_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.
+            bottomsheet.BottomSheetBehavior"
+        layout="@layout/bottom_sheet"/>
 </LinearLayout>

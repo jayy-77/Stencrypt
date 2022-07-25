@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextDecoding;
 import com.example.stencrypt.steganography.TextDecodingCallback;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.IOException;
 

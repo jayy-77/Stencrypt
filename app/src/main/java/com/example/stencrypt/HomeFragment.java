@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +52,7 @@ public class HomeFragment extends Fragment {
 //               Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
                 if(i>57 ){
                     encode.setImageResource(R.drawable.round_encode_green);
-                    EncodeFragment encodeFragment = new EncodeFragment(resultOk, contentResolver, applicationContext);
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.flFragment, encodeFragment);
-                    fragmentTransaction.commit();
+                    ((HomePage)getActivity()).openEncodeFragment();
                     ((HomePage)getActivity()).menuSettingEncode();
                 }
                 if(i<=57 && i>=43){

@@ -1,12 +1,14 @@
 package com.example.stencrypt;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -21,6 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.security.NoSuchAlgorithmException;
 
 
 public class GoogleLoginActivity extends AppCompatActivity {
@@ -28,7 +34,10 @@ public class GoogleLoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
-
+    private DBHelper mydb ;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference userDetailRef = db.collection("UserDetails");
+    String publicKeyFire = null;
     @Override
     protected void onStart() {
         super.onStart();
@@ -40,15 +49,31 @@ public class GoogleLoginActivity extends AppCompatActivity {
             finish();
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void keyOperations(){
+        mydb = new DBHelper(this);
+        if(mydb.getData(1).getCount()>0){
+            Toast.makeText(getApplicationContext(), "Already Exists", Toast.LENGTH_SHORT).show();
+        }else{
+            RSA rsaObj = new RSA();
+            try {
+                mydb.insertData(rsaObj.keyPairGenerate("private"));
+                publicKeyFire = rsaObj.keyPairGenerate("public");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
 
+        }
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_google_login);
 
-        mAuth = FirebaseAuth.getInstance();
 
+        mAuth = FirebaseAuth.getInstance();
         createRequest();
 
         findViewById(R.id.google_signIn).setOnClickListener(new View.OnClickListener() {
@@ -90,16 +115,17 @@ public class GoogleLoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            keyOperations();
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            UserObject userObj = new UserObject(user.getEmail(),user.getDisplayName(),user.getPhotoUrl(),publicKeyFire);
+                            db.collection("UserDetails").document(user.getEmail()).set(userObj);
                             Intent intent = new Intent(getApplicationContext(), HomePage.class);
                             startActivity(intent);
-
-
                         } else {
                             Toast.makeText(GoogleLoginActivity.this, "Sorry auth failed.", Toast.LENGTH_SHORT).show();
                         }

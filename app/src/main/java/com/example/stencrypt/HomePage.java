@@ -1,33 +1,70 @@
 package com.example.stencrypt;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class HomePage extends AppCompatActivity {
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+
+public class HomePage extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener {
     FloatingActionButton userProfile;
+    EncodeFragment encodeFragment;
     Fragment frag = null;
     BottomAppBar bottomAppBar;
     Boolean bool = false;
     FrameLayout fragL;
+    GoogleSignInClient mGoogleSignInClient;
+    ContentResolver contentResolver;
+    Context context;
+    private DBHelper dbS;
+    EncodeFragment fragment;
+    String key, messagae;
+    MaterialToolbar materialToolbar;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth;
+    private CollectionReference userDetailRef = db.collection("UserDetails");
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-
         bottomAppBar = findViewById(R.id.bottomAppBar);
         userProfile  = findViewById(R.id.userProfile);
         fragL = findViewById(R.id.flFragment);
+        materialToolbar = findViewById(R.id.mToolbarDefaultSize_AppBarTopActivity);
+        contentResolver = getContentResolver();
+        context = getApplicationContext();
+        fragment  = new EncodeFragment();
+        dbS = new DBHelper(this);
 
+        if(dbS.getData(1).getCount()>0){
+            Toast.makeText(getApplicationContext(), "Alreadty Exists", Toast.LENGTH_SHORT).show();
+        }
 
         userProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +85,21 @@ public class HomePage extends AppCompatActivity {
                 }else{
                     Toast.makeText(getApplicationContext(), "network", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.gLogout:
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(),GoogleLoginActivity.class));
+                        finish();
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + item.getItemId());
+                }
+                return true;
             }
         });
 
@@ -79,4 +131,21 @@ public class HomePage extends AppCompatActivity {
         userProfile.setImageResource(R.drawable.ic_baseline_cloud_upload_24);
         bool = true;
     }
+    public void openEncodeFragment(){
+        frag = new EncodeFragment(RESULT_OK,contentResolver,context);
+        menuSettings();
+        userProfile.setImageResource(R.drawable.ic_baseline_cloud_upload_24);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,frag,"").commit();
+        materialToolbar.setTitle("ENCODE");
+    }
+
+    @Override
+    public void onButtonClicked(String key,String message) {
+        this.key = key;
+        this.messagae = message;
+        ((EncodeFragment) frag).getTextData(key,messagae);
+    }
+
+
+
 }

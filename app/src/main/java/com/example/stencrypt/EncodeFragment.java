@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextEncoding;
 import com.example.stencrypt.steganography.TextEncodingCallback;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,6 +63,10 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         this.contentResolver = contentResolver;
         this.applicationContext = applicationContext;
     }
+    public EncodeFragment(){
+
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -89,20 +95,21 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         encode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                whether_encoded.setText("");
-                if (filepath != null) {
-                    if (message.getText() != null) {
+//                whether_encoded.setText("");
+//                if (filepath != null) {
+//                    if (message.getText() != null) {
+//                        imageSteganography = new ImageSteganography(message.getText().toString(),
+//                                secret_key.getText().toString(),
+//                                original_image);
+//                        textEncoding = new TextEncoding(getActivity(),EncodeFragment.this);
+//                        textEncoding.execute(imageSteganography);
+//                    }
+//                }
+                BottomSheetDialog  obj = new BottomSheetDialog();
 
-                        imageSteganography = new ImageSteganography(message.getText().toString(),
-                                secret_key.getText().toString(),
-                                original_image);
-                        textEncoding = new TextEncoding(getActivity(),EncodeFragment.this);
-                        textEncoding.execute(imageSteganography);
-                    }
-                }
+                obj.show(getParentFragmentManager(),"");
             }
         });
-
         save_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,4 +217,7 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     }
 
 
+    public void getTextData(String key, String message){
+        whether_encoded.setText(key+"\n"+message);
+    }
 }
