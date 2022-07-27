@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +37,7 @@ public class GoogleLoginActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     private DBHelper mydb ;
+    LinearLayout loginLayout;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userDetailRef = db.collection("UserDetails");
     String publicKeyFire = null;
@@ -53,7 +56,7 @@ public class GoogleLoginActivity extends AppCompatActivity {
     public void keyOperations(){
         mydb = new DBHelper(this);
         if(mydb.getData(1).getCount()>0){
-            Toast.makeText(getApplicationContext(), "Already Exists", Toast.LENGTH_SHORT).show();
+
         }else{
             RSA rsaObj = new RSA();
             try {
@@ -124,6 +127,9 @@ public class GoogleLoginActivity extends AppCompatActivity {
 
                             UserObject userObj = new UserObject(user.getEmail(),user.getDisplayName(),user.getPhotoUrl(),publicKeyFire);
                             db.collection("UserDetails").document(user.getEmail()).set(userObj);
+                            loginLayout = findViewById(R.id.loginLayout);
+                            Snackbar snackbar = Snackbar.make(loginLayout,"RSA keys Generated",Snackbar.LENGTH_LONG);
+                            snackbar.show();
                             Intent intent = new Intent(getApplicationContext(), HomePage.class);
                             startActivity(intent);
                         } else {

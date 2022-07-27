@@ -26,7 +26,7 @@
             android:hint="Encryption Key">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/encode_key_et"
+                android:id="@+id/decode_key_et"
                 android:textColor="#F2B8B5"
                 android:inputType="textPassword"
                 android:textColorHint="#F2B8B5"
@@ -35,34 +35,17 @@
 
 
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/filledTextField2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+
+        
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/decode_btn_bottomsheet"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:hintTextColor="#F2B8B5"
-            app:endIconMode="clear_text"
-            android:textColorHint="#F2B8B5"
+            android:textSize="15sp"
             android:layout_margin="5dp"
-            android:hint="Message">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/encode_message_et"
-                android:textColor="#F2B8B5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/encode_btn_bottomsheet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:layout_margin="5dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_gravity="center"
-        android:text="ENCODE" />
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_gravity="center"
+            android:text="decode" />
     </LinearLayout>
 </RelativeLayout>

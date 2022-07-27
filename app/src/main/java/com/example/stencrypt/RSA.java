@@ -2,6 +2,7 @@ package com.example.stencrypt;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.math.BigInteger;
@@ -11,7 +12,6 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -32,7 +32,7 @@ public class RSA {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String keyPairGenerate(String whichOne) throws NoSuchAlgorithmException {
+    public String keyPairGenerate(@NonNull String whichOne) throws NoSuchAlgorithmException {
         kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(1024);
         kp = kpg.genKeyPair();

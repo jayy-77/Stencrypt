@@ -1,6 +1,7 @@
 package com.example.stencrypt;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -10,6 +11,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -26,12 +31,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextEncoding;
 import com.example.stencrypt.steganography.TextEncodingCallback;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,18 +50,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EncodeFragment extends Fragment implements TextEncodingCallback {
-    private static final int SELECT_PICTURE = 100;
     private static final String TAG = "Encode Class";
-    private TextView whether_encoded;
     private ImageView imageView;
-    private EditText message;
-    private EditText secret_key;
+    private String key, message;
     private TextEncoding textEncoding;
     private ImageSteganography imageSteganography;
     private ProgressDialog save;
     private Uri filepath;
-    private Bitmap original_image;
-    private Bitmap encoded_image;
+    public Bitmap original_image, encoded_image;
+    LottieAnimationView lottieUpload;
     int resultOk;
     ContentResolver contentResolver;
     Context applicationContext;
@@ -71,16 +76,12 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        whether_encoded = view.findViewById(R.id.logT);
-
-        imageView = view.findViewById(R.id.iv_encode);
-
-        message = view.findViewById(R.id.message_et);
-        secret_key = view.findViewById(R.id.key_et);
-
-        Button choose_image_button = view.findViewById(R.id.btn_choose);
-        Button encode_button = view.findViewById(R.id.btn_encode);
-        Button save_image_button = view.findViewById(R.id.btn_save);
+//        whether_encoded = view.findViewById(R.id.logT);
+        lottieUpload = view.findViewById(R.id.lottieUploadDecode);
+        imageView = view.findViewById(R.id.iv_decode);
+        Button choose_image_button = view.findViewById(R.id.btn_choose_decode);
+        Button encode_button = view.findViewById(R.id.btn_decode);
+        Button save_image_button = view.findViewById(R.id.btn_save_decode);
 
         checkAndRequestPermissions();
 
@@ -88,6 +89,7 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         choose_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                lottieUpload.setVisibility(View.GONE);
                 ImageChooser();
             }
         });
@@ -95,17 +97,8 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         encode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                whether_encoded.setText("");
-//                if (filepath != null) {
-//                    if (message.getText() != null) {
-//                        imageSteganography = new ImageSteganography(message.getText().toString(),
-//                                secret_key.getText().toString(),
-//                                original_image);
-//                        textEncoding = new TextEncoding(getActivity(),EncodeFragment.this);
-//                        textEncoding.execute(imageSteganography);
-//                    }
-//                }
-                BottomSheetDialog  obj = new BottomSheetDialog();
+
+                BottomSheetDialog  obj = new BottomSheetDialog("encode");
 
                 obj.show(getParentFragmentManager(),"");
             }
@@ -117,15 +110,17 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
                 Thread PerformEncoding = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        saveToInternalStorage(imgToSave);
+                        saveToInternalStorage(encoded_image);
+//                        Toast.makeText(getContext(), imgToSave.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
-                save = new ProgressDialog(getContext());
-                save.setMessage("Saving, Please Wait...");
-                save.setTitle("Saving Image");
-                save.setIndeterminate(false);
-                save.setCancelable(false);
-                save.show();
+//                save = new ProgressDialog(getActivity());
+//                save.setMessage("Saving, Please Wait...");
+//                save.setTitle("Saving Image");
+//                save.setIndeterminate(false);
+//                save.setCancelable(false);
+//                save.show();
+                Snackbar.make(imageView,"Image Saved",Snackbar.LENGTH_LONG);
                 PerformEncoding.start();
             }
         });
@@ -138,29 +133,36 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
 
     }
     private void ImageChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+        lottieUpload.setVisibility(View.GONE);
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLaunchncher.launch(i);
     }
+    ActivityResultLauncher<Intent> someActivityResultLaunchncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == Activity.RESULT_OK){
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == SELECT_PICTURE && resultCode == resultOk && data != null && data.getData() != null) {
-
-            filepath = data.getData();
+                        filepath = result.getData().getData();
             try {
+                Toast.makeText(applicationContext, "this happened", Toast.LENGTH_SHORT).show();
                 original_image = MediaStore.Images.Media.getBitmap(contentResolver, filepath);
 
+                Log.d("HElowoooooooooooooooooo", String.valueOf(original_image.getByteCount()));
                 imageView.setImageBitmap(original_image);
             } catch (IOException e) {
                 Log.d(TAG, "Error : " + e);
             }
-        }
 
-    }
+
+                    }
+                }
+            }
+    );
+
 
 
     @Override
@@ -170,11 +172,13 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     @Override
     public void onCompleteTextEncoding(ImageSteganography result) {
 
-
         if (result != null && result.isEncoded()) {
             encoded_image = result.getEncoded_image();
-            whether_encoded.setText("Encoded");
             imageView.setImageBitmap(encoded_image);
+            Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(getContext(), "Faliled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -187,10 +191,10 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
             fOut.flush(); // Not really required
             fOut.close(); // do not forget to close the stream
-            whether_encoded.post(new Runnable() {
+            imageView.post(new Runnable() {
                 @Override
                 public void run() {
-                    save.dismiss();
+//                    save.dismiss();
                 }
             });
         } catch (FileNotFoundException e) {
@@ -217,7 +221,23 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     }
 
 
-    public void getTextData(String key, String message){
-        whether_encoded.setText(key+"\n"+message);
+    public void getTextData(String key2, String message2){
+        if (filepath != null) {
+            if (message2!= null) {
+                imageSteganography = new ImageSteganography(message2, key2, original_image);
+                textEncoding = new TextEncoding(getActivity(),EncodeFragment.this);
+                textEncoding.execute(imageSteganography);
+                Toast.makeText(getContext(), "success buton", Toast.LENGTH_SHORT).show();
+
+            }else{
+                Toast.makeText(getContext(), "Faliled bton", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    public void encodeImage(){
+
+    }
+    public void imageOpener(){
+        ImageChooser();
     }
 }

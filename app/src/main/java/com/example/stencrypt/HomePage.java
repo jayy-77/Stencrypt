@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +43,7 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
     Context context;
     private DBHelper dbS;
     EncodeFragment fragment;
-    String key, messagae;
+    String key, messagae, whichFragment;
     MaterialToolbar materialToolbar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth;
@@ -60,18 +61,20 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
         contentResolver = getContentResolver();
         context = getApplicationContext();
         fragment  = new EncodeFragment();
-        dbS = new DBHelper(this);
 
-        if(dbS.getData(1).getCount()>0){
-            Toast.makeText(getApplicationContext(), "Alreadty Exists", Toast.LENGTH_SHORT).show();
-        }
 
         userProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                frag = new UserProfileFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, frag).commit();
-                menuSettings();
+                if(whichFragment.equals("encode")){
+                    ((EncodeFragment) frag).imageOpener();
+                }else if(whichFragment.equals("decode")){
+                    ((DecodeFragment) frag).imageOpener();
+                }else {
+                    frag = new UserProfileFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, frag).commit();
+                    menuSettings();
+                }
             }
         });
         bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -132,20 +135,37 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
         bool = true;
     }
     public void openEncodeFragment(){
+        whichFragment = "encode";
         frag = new EncodeFragment(RESULT_OK,contentResolver,context);
         menuSettings();
         userProfile.setImageResource(R.drawable.ic_baseline_cloud_upload_24);
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,frag,"").commit();
         materialToolbar.setTitle("ENCODE");
     }
+    public void openDecodeFragment(){
+        whichFragment = "decode";
+        frag = new DecodeFragment(RESULT_OK,contentResolver,context);
+        menuSettings();
+        userProfile.setImageResource(R.drawable.ic_baseline_cloud_upload_24);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,frag,"").commit();
+        materialToolbar.setTitle("DECODE");
+    }
 
     @Override
     public void onButtonClicked(String key,String message) {
         this.key = key;
         this.messagae = message;
-        ((EncodeFragment) frag).getTextData(key,messagae);
+
+            ((EncodeFragment) frag).getTextData(key, messagae);
+
+
+            Toast.makeText(getApplicationContext(), "data transfered", Toast.LENGTH_SHORT).show();
+
     }
 
-
-
+    @Override
+    public void onDecodeButtonClicked(String key) {
+        this.key = key;
+        ((DecodeFragment) frag).getTextDataDecode(key);
+    }
 }

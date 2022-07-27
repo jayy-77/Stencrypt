@@ -1,87 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/black"
-    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".EncodeFragment">
+
     <ImageView
-        android:layout_gravity="center"
-        android:id="@+id/iv_encode"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:id="@+id/iv_decode"
+        android:layout_width="380dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="@+id/materialCardView22"
+        app:layout_constraintEnd_toEndOf="@+id/materialCardView22"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView22"
+        app:layout_constraintTop_toTopOf="@+id/materialCardView22" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextViewDecode"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:boxStrokeColor="#F2B8B5"
-        android:layout_margin="10dp"
-        app:boxBackgroundColor="#221F1E"
-        android:textColorHint="#F2B8B5"
+        android:text="Encode Your Image here"
+        android:textColor="#F2B8B5"
+        android:textFontWeight="@integer/material_motion_duration_long_1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.798" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView22"
+        android:layout_width="380dp"
+        android:layout_height="300dp"
+        android:background="@drawable/dotted_shape"
         android:backgroundTint="#221F1E"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Key">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/message_et"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conToHideDecode"
             android:layout_width="match_parent"
-            android:textColor="#F2B8B5"
-            android:hint="Key"
-            android:backgroundTint="#221F1E"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:background="@drawable/dotted_shape">
 
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField"
-        android:layout_width="match_parent"
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieUploadDecode"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/uploadfiles" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:boxStrokeColor="#F2B8B5"
-        android:layout_margin="10dp"
-        app:boxBackgroundColor="#221F1E"
-        android:textColorHint="#F2B8B5"
-        android:backgroundTint="#221F1E"
+        android:text="Encode"
+        android:id="@+id/btn_decode"
+        app:icon="@drawable/ic_baseline_lock_24"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/materialCardView22"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView22"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView22" />
 
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="@string/label">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/key_et"
-            android:layout_width="match_parent"
-            android:textColor="#F2B8B5"
-            android:backgroundTint="#221F1E"
-            android:layout_height="wrap_content"
-            />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save_decode"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
 
-    </com.google.android.material.textfield.TextInputLayout>
-<Button
-    android:id="@+id/btn_choose"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Select image"/>
-    <Button
-        android:id="@+id/btn_encode"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="encode image"/>
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="save image"/>
+        android:layout_marginTop="4dp"
+        android:text="SAVE"
+        app:icon="@drawable/ic_baseline_save_24"
+        app:layout_constraintEnd_toEndOf="@+id/materialCardView22"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView22"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView22" />
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:textColor="#F2B8B5"
-    android:id="@+id/logT"/>
-    <include
-        android:id="@+id/bottom_sheet_layout"
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_behavior="com.google.android.material.
-            bottomsheet.BottomSheetBehavior"
-        layout="@layout/bottom_sheet"/>
-</LinearLayout>
+        android:id="@+id/btn_choose_decode"
+        android:layout_marginTop="4dp"
+        android:text="SHARE"
+        app:icon="@drawable/ic_baseline_share_24"
+        app:layout_constraintEnd_toEndOf="@+id/materialCardView22"
+        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintStart_toStartOf="@+id/materialCardView22"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView22" />
+    <!--    <ImageView-->
+<!--        android:layout_gravity="center"-->
+<!--        android:id="@+id/iv_encode"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"/>-->
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:boxStrokeColor="#F2B8B5"-->
+<!--        android:layout_margin="10dp"-->
+<!--        app:boxBackgroundColor="#221F1E"-->
+<!--        android:textColorHint="#F2B8B5"-->
+<!--        android:backgroundTint="#221F1E"-->
+
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:hint="Key">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/message_et"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:textColor="#F2B8B5"-->
+<!--            android:hint="Key"-->
+<!--            android:backgroundTint="#221F1E"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            />-->
+
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/outlinedTextField"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:boxStrokeColor="#F2B8B5"-->
+<!--        android:layout_margin="10dp"-->
+<!--        app:boxBackgroundColor="#221F1E"-->
+<!--        android:textColorHint="#F2B8B5"-->
+<!--        android:backgroundTint="#221F1E"-->
+
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:hint="@string/label">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/key_et"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:textColor="#F2B8B5"-->
+<!--            android:backgroundTint="#221F1E"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            />-->
+
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+<!--<Button-->
+<!--    android:id="@+id/btn_choose"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="Select image"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_encode"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="encode image"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_save"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="save image"/>-->
+
+<!--<TextView-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:textColor="#F2B8B5"-->
+<!--    android:id="@+id/logT"/>-->
+<!--    <include-->
+<!--        android:id="@+id/bottom_sheet_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_behavior="com.google.android.material.-->
+<!--            bottomsheet.BottomSheetBehavior"-->
+<!--        layout="@layout/bottom_sheet"/>-->
+</androidx.constraintlayout.widget.ConstraintLayout>

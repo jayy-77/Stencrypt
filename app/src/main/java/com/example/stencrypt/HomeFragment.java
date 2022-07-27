@@ -62,11 +62,7 @@ public class HomeFragment extends Fragment {
                 }
                 if(i<43 ){
                     decode.setImageResource(R.drawable.round_encode_green);
-                    DecodeFragment decodeFragment = new DecodeFragment(resultOk,contentResolver);
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.flFragment, decodeFragment);
-                    fragmentTransaction.commit();
+                    ((HomePage)getActivity()).openDecodeFragment();
                     ((HomePage)getActivity()).menuSettingEncode();
                 }
             }
