@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -28,18 +29,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextEncoding;
 import com.example.stencrypt.steganography.TextEncodingCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,9 +51,11 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     private static final String TAG = "Encode Class";
     private ImageView imageView;
     private String key, message;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextEncoding textEncoding;
     private ImageSteganography imageSteganography;
     private ProgressDialog save;
+    AlertDialog materialAlertDialogBuilder;
     private Uri filepath;
     public Bitmap original_image, encoded_image;
     LottieAnimationView lottieUpload;
@@ -76,10 +76,9 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        whether_encoded = view.findViewById(R.id.logT);
         lottieUpload = view.findViewById(R.id.lottieUploadDecode);
         imageView = view.findViewById(R.id.iv_decode);
-        Button choose_image_button = view.findViewById(R.id.btn_choose_decode);
+        Button choose_image_button = view.findViewById(R.id.btn_share_decode);
         Button encode_button = view.findViewById(R.id.btn_decode);
         Button save_image_button = view.findViewById(R.id.btn_save_decode);
 
@@ -89,8 +88,8 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         choose_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lottieUpload.setVisibility(View.GONE);
-                ImageChooser();
+                BottomSheetDialog obj = new BottomSheetDialog(encoded_image,"comm",key);
+                obj.show(getParentFragmentManager(),"");
             }
         });
 
@@ -111,16 +110,19 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
                     @Override
                     public void run() {
                         saveToInternalStorage(encoded_image);
-//                        Toast.makeText(getContext(), imgToSave.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
-//                save = new ProgressDialog(getActivity());
+              materialAlertDialogBuilder =  new MaterialAlertDialogBuilder(getActivity())
+                        .setTitle("Saving Image")
+                        .setMessage("Saving, Please Wait")
+                        .show();
+//                save = new ProgressDialog(getActivity(),R.layout.activity_google_login);
 //                save.setMessage("Saving, Please Wait...");
 //                save.setTitle("Saving Image");
 //                save.setIndeterminate(false);
 //                save.setCancelable(false);
 //                save.show();
-                Snackbar.make(imageView,"Image Saved",Snackbar.LENGTH_LONG);
+
                 PerformEncoding.start();
             }
         });
@@ -148,7 +150,6 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
 
                         filepath = result.getData().getData();
             try {
-                Toast.makeText(applicationContext, "this happened", Toast.LENGTH_SHORT).show();
                 original_image = MediaStore.Images.Media.getBitmap(contentResolver, filepath);
 
                 Log.d("HElowoooooooooooooooooo", String.valueOf(original_image.getByteCount()));
@@ -162,9 +163,6 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
                 }
             }
     );
-
-
-
     @Override
     public void onStartTextEncoding() {
     }
@@ -175,26 +173,30 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
         if (result != null && result.isEncoded()) {
             encoded_image = result.getEncoded_image();
             imageView.setImageBitmap(encoded_image);
-            Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-
+            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Successfully encoded", Snackbar.LENGTH_LONG);
+            snackBar.show();
         }else{
-            Toast.makeText(getContext(), "Faliled", Toast.LENGTH_SHORT).show();
+            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Failed", Snackbar.LENGTH_LONG);
+            snackBar.show();
         }
     }
 
     private void saveToInternalStorage(Bitmap bitmapImage) {
         OutputStream fOut;
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS), "Encoded" + ".PNG"); // the File to save ,
+                Environment.DIRECTORY_DOWNLOADS), "Encoded" + ".PNG");
         try {
             fOut = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
-            fOut.flush(); // Not really required
-            fOut.close(); // do not forget to close the stream
+            fOut.flush();
+            fOut.close();
             imageView.post(new Runnable() {
                 @Override
                 public void run() {
 //                    save.dismiss();
+                    materialAlertDialogBuilder.dismiss();
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),"Image saved", Snackbar.LENGTH_LONG);
+                    snackBar.show();
                 }
             });
         } catch (FileNotFoundException e) {
@@ -221,16 +223,14 @@ public class EncodeFragment extends Fragment implements TextEncodingCallback {
     }
 
 
-    public void getTextData(String key2, String message2){
+    public void getTextData(String key, String message){
+        this.key = key;
+        this.message = message;
         if (filepath != null) {
-            if (message2!= null) {
-                imageSteganography = new ImageSteganography(message2, key2, original_image);
+            if (message!= null) {
+                imageSteganography = new ImageSteganography(message, key, original_image);
                 textEncoding = new TextEncoding(getActivity(),EncodeFragment.this);
                 textEncoding.execute(imageSteganography);
-                Toast.makeText(getContext(), "success buton", Toast.LENGTH_SHORT).show();
-
-            }else{
-                Toast.makeText(getContext(), "Faliled bton", Toast.LENGTH_SHORT).show();
             }
         }
     }

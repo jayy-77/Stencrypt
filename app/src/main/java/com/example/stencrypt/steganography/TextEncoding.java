@@ -3,13 +3,16 @@ package com.example.stencrypt.steganography;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Window;
 
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.stencrypt.EncodeFragment;
+import com.example.stencrypt.R;
 
 import java.util.List;
 
@@ -27,10 +30,11 @@ public class TextEncoding extends AsyncTask<ImageSteganography, Integer, ImageSt
     private final TextEncodingCallback callbackInterface;
     private int maximumProgress;
     private final ProgressDialog progressDialog;
-
     public TextEncoding(Activity activity, TextEncodingCallback callbackInterface) {
         super();
-        this.progressDialog = new ProgressDialog(activity);
+        this.progressDialog = new ProgressDialog(activity, android.R.style.Theme_Material);
+        this.progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         this.callbackInterface = callbackInterface;
         //making result object
         this.result = new ImageSteganography();

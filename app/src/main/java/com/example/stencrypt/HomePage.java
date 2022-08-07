@@ -43,7 +43,7 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
     Context context;
     private DBHelper dbS;
     EncodeFragment fragment;
-    String key, messagae, whichFragment;
+    String key, messagae, whichFragment = "userProfile";
     MaterialToolbar materialToolbar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth;
@@ -70,7 +70,8 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
                     ((EncodeFragment) frag).imageOpener();
                 }else if(whichFragment.equals("decode")){
                     ((DecodeFragment) frag).imageOpener();
-                }else {
+                }
+                else if(whichFragment.equals("userProfile")) {
                     frag = new UserProfileFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, frag).commit();
                     menuSettings();

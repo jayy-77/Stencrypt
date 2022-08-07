@@ -24,13 +24,18 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.3170289855072464" />
         <entry key="app/src/main/res/layout/activity_profile_page.xml" value="0.19427083333333334" />
-        <entry key="app/src/main/res/layout/bottom_sheet.xml" value="0.3893805309734513" />
+        <entry key="app/src/main/res/layout/bottom_sheet.xml" value="0.1" />
         <entry key="app/src/main/res/layout/bottom_sheet_comm.xml" value="0.3170289855072464" />
         <entry key="app/src/main/res/layout/bottom_sheet_decode.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/custom_progress_box.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_decode.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_encode.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_item_list.xml" value="0.3170289855072464" />
+        <entry key="app/src/main/res/layout/fragment_user_profile.xml" value="0.3170289855072464" />
         <entry key="app/src/main/res/layout/home_page_fragment.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/sten_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/stenshare_layout.xml" value="0.5" />
         <entry key="app/src/main/res/menu/alternate_menu.xml" value="0.3734375" />
         <entry key="app/src/main/res/menu/bottom_app_bar.xml" value="0.3734375" />
       </map>

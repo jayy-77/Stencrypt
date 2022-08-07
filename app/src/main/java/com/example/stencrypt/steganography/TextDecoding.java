@@ -23,7 +23,6 @@ public class TextDecoding extends AsyncTask<ImageSteganography, Void, ImageStega
     //Callback interface for AsyncTask
     private final TextDecodingCallback textDecodingCallback;
     private ProgressDialog progressDialog;
-
     public TextDecoding(Activity activity, TextDecodingCallback textDecodingCallback) {
         super();
         this.progressDialog = new ProgressDialog(activity);

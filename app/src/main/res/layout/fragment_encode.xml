@@ -100,7 +100,7 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_choose_decode"
+        android:id="@+id/btn_share_decode"
         android:layout_marginTop="4dp"
         android:text="SHARE"
         app:icon="@drawable/ic_baseline_share_24"

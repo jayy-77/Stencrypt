@@ -3,6 +3,7 @@ package com.example.stencrypt;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -22,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextDecoding;
 import com.example.stencrypt.steganography.TextDecodingCallback;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 
@@ -46,6 +50,7 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
     ContentResolver contentResolver;
     Context applicationContext;
     LottieAnimationView lottieUpload;
+    AlertDialog materialDialogs;
 
 
     private Bitmap original_image;
@@ -62,7 +67,7 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
         imageView = view.findViewById(R.id.iv_decode);
         lottieUpload = view.findViewById(R.id.lottieUploadDecode);
 
-        Button choose_image_button = view.findViewById(R.id.btn_choose_decode);
+        Button choose_image_button = view.findViewById(R.id.btn_share_decode);
         Button decode_button = view.findViewById(R.id.btn_decode);
 
         choose_image_button.setOnClickListener(new View.OnClickListener() {
@@ -75,17 +80,11 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
         decode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 BottomSheetDialog obj = new BottomSheetDialog("decode");
                 obj.show(getParentFragmentManager(),"");
-
             }
         });
-
-
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,62 +121,49 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
                 }
             }
     );
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        //Image set to imageView
-//        if (requestCode == SELECT_PICTURE && resultCode == resultOk && data != null && data.getData() != null) {
-//
-//            filepath = data.getData();
-//            try {
-//                original_image = MediaStore.Images.Media.getBitmap(contentResolver, filepath);
-//
-//                imageView.setImageBitmap(original_image);
-//            } catch (IOException e) {
-//                Log.d(TAG, "Error : " + e);
-//            }
-//        }
-//
-//    }
-
     @Override
     public void onStartTextEncoding() {
-        //Whatever you want to do by the start of textDecoding
-    }
 
+    }
     @Override
     public void onCompleteTextEncoding(ImageSteganography result) {
 
-        //By the end of textDecoding
-
         if (result != null) {
-            if (!result.isDecoded())
-                textView.setText("No message found");
+            if (!result.isDecoded()) {
+                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "No message found", Snackbar.LENGTH_LONG);
+                snackBar.show();
+            }
             else {
                 if (!result.isSecretKeyWrong()) {
-//                    textView.setText("Decoded");
-                    Toast.makeText(applicationContext, result.getMessage(), Toast.LENGTH_SHORT).show();
-//                    message.setText("" + result.getMessage());
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),"Successfully decoded", Snackbar.LENGTH_LONG);
+                    snackBar.show();
+
+                   materialDialogs =  new MaterialAlertDialogBuilder(getContext())
+                            .setTitle("Decoded message from image")
+                            .setMessage(result.getMessage())
+                            .setNegativeButton("close", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .show();
+
                 } else {
-//                    textView.setText("Wrong secret key");
-                }
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),"Wrong secret key", Snackbar.LENGTH_LONG);
+                    snackBar.show();                }
             }
         } else {
-//            textView.setText("Select Image First");
-        }
+            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Select image first", Snackbar.LENGTH_LONG);
+            snackBar.show();        }
     }
     public void imageOpener(){
         ImageChooser();
     }
     public void getTextDataDecode(String key){
         if(filepath != null) {
-
             ImageSteganography imageSteganography = new ImageSteganography(key, original_image);
-
             TextDecoding textDecoding = new TextDecoding(getActivity(),DecodeFragment.this);
-
             textDecoding.execute(imageSteganography);
         }
     }
