@@ -13,20 +13,25 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -72,7 +77,7 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
                     ((DecodeFragment) frag).imageOpener();
                 }
                 else if(whichFragment.equals("userProfile")) {
-                    frag = new UserProfileFragment();
+                    frag = new StensFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, frag).commit();
                     menuSettings();
                 }
@@ -86,6 +91,7 @@ public class HomePage extends AppCompatActivity implements BottomSheetDialog.Bot
                     menuAlternateSetting();
                     userProfile.setImageResource(R.drawable.person);
                     getSupportFragmentManager().beginTransaction().replace(R.id.flFragment,frag,"").commit();
+                    whichFragment = "userProfile";
                 }else{
                     Toast.makeText(getApplicationContext(), "network", Toast.LENGTH_SHORT).show();
                 }

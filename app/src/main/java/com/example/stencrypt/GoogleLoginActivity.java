@@ -1,5 +1,4 @@
 package com.example.stencrypt;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.security.NoSuchAlgorithmException;
 
 
@@ -37,7 +36,7 @@ public class GoogleLoginActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     private DBHelper mydb ;
-    LinearLayout loginLayout;
+    ConstraintLayout loginLayout;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userDetailRef = db.collection("UserDetails");
     String publicKeyFire = null;
@@ -65,9 +64,7 @@ public class GoogleLoginActivity extends AppCompatActivity {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +110,6 @@ public class GoogleLoginActivity extends AppCompatActivity {
             }
         }
     }
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -136,6 +132,6 @@ public class GoogleLoginActivity extends AppCompatActivity {
                             Toast.makeText(GoogleLoginActivity.this, "Sorry auth failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+             });
     }
 }

@@ -49,7 +49,6 @@ public class HomeFragment extends Fragment {
         sliderEncodeDecode.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-//               Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
                 if(i>57 ){
                     encode.setImageResource(R.drawable.round_encode_green);
                     ((HomePage)getActivity()).openEncodeFragment();

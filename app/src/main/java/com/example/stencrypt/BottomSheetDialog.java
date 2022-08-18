@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +23,25 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
-    String whichOne = null, key = null, bitString;
+    String whichOne = null, key = null, bitString, currentDate, currentTime;
+    StenShareObject obj = null;
     Bitmap bitmap = null;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     View v;
@@ -120,8 +134,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         stenSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StenShareObject obj = new StenShareObject(bitString,key);
-                db.collection("UserDetails").document(email_et.getText().toString()).collection("StenShare").document("Stens").set(obj);
+                 currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                 currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+                 obj = new StenShareObject(bitString,key,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),email_et.getText().toString().trim(),currentDate,currentTime);
+                 db.collection("UserDetails").document(email_et.getText().toString().trim()).collection("StenShare").add(obj);
             }
         });
     }
