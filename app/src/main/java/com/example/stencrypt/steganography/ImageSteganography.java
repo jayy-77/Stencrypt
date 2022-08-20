@@ -5,12 +5,8 @@ import android.util.Log;
 
 
 
-/**
- * This main class of the text steganography
- */
 public class ImageSteganography {
 
-    //Tag for Log
     private static final String TAG = ImageSteganography.class.getName();
 
     private String message;
@@ -40,11 +36,7 @@ public class ImageSteganography {
         this.message = message;
         this.secret_key = convertKeyTo128bit(secret_key);
         this.image = image;
-        /*try {
-            this.encrypted_zip = Zipping.compress(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } */
+
 
         this.encrypted_zip = message.getBytes();
         this.encrypted_message = encryptMessage(message, this.secret_key);

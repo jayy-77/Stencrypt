@@ -1,10 +1,9 @@
-package com.example.stencrypt;
+package com.example.stencrypt.Activities;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.stencrypt.Utilities.DBHelper;
+import com.example.stencrypt.R;
+import com.example.stencrypt.Utilities.RSA;
+import com.example.stencrypt.DataModel.UserObject;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -59,8 +62,10 @@ public class GoogleLoginActivity extends AppCompatActivity {
         }else{
             RSA rsaObj = new RSA();
             try {
-                mydb.insertData(rsaObj.keyPairGenerate("private"));
-                publicKeyFire = rsaObj.keyPairGenerate("public");
+                String pair[] = new String[0];
+                pair = rsaObj.keyPairGenerate();
+                mydb.insertData(pair[0]);
+                publicKeyFire = pair[1];
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }

@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/black"
-    tools:context=".HomePage">
+    tools:context=".Activities.HomePage">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".HomePage">
+        tools:context=".Activities.HomePage">
 
 
         <com.google.android.material.appbar.AppBarLayout

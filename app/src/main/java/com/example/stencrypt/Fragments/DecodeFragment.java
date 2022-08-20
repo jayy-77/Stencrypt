@@ -1,4 +1,4 @@
-package com.example.stencrypt;
+package com.example.stencrypt.Fragments;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -26,14 +26,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.stencrypt.R;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextDecoding;
 import com.example.stencrypt.steganography.TextDecodingCallback;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -47,17 +46,19 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
     private ImageView imageView;
     private Uri filepath;
     int resultOk;
+    String key;
     ContentResolver contentResolver;
     Context applicationContext;
     LottieAnimationView lottieUpload;
     AlertDialog materialDialogs;
-
-
     private Bitmap original_image;
-    public DecodeFragment(int resultOk, ContentResolver contentResolver, Context applicationContext) {
+
+
+    public DecodeFragment(int resultOk, ContentResolver contentResolver, Context applicationContext,Bitmap bitmap) {
         this.resultOk = resultOk;
         this.contentResolver = contentResolver;
         this.applicationContext = applicationContext;
+        this.original_image = bitmap;
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -65,10 +66,19 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
 
 
         imageView = view.findViewById(R.id.iv_decode);
+        try {
+        if(!original_image.equals(null)){
+            imageView.setImageBitmap(original_image);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         lottieUpload = view.findViewById(R.id.lottieUploadDecode);
 
         Button choose_image_button = view.findViewById(R.id.btn_share_decode);
         Button decode_button = view.findViewById(R.id.btn_decode);
+
 
         choose_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,16 +165,17 @@ public class DecodeFragment extends Fragment implements TextDecodingCallback {
             }
         } else {
             Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Select image first", Snackbar.LENGTH_LONG);
-            snackBar.show();        }
+            snackBar.show();
+        }
     }
     public void imageOpener(){
         ImageChooser();
     }
     public void getTextDataDecode(String key){
-        if(filepath != null) {
+            this.key = key;
             ImageSteganography imageSteganography = new ImageSteganography(key, original_image);
             TextDecoding textDecoding = new TextDecoding(getActivity(),DecodeFragment.this);
             textDecoding.execute(imageSteganography);
-        }
+
     }
 }

@@ -1,48 +1,56 @@
-package com.example.stencrypt;
+package com.example.stencrypt.Fragments;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.annotation.RequiresApi;
 
+import com.example.stencrypt.Activities.HomePage;
+import com.example.stencrypt.Utilities.DBHelper;
+import com.example.stencrypt.R;
+import com.example.stencrypt.Utilities.RSA;
+import com.example.stencrypt.DataModel.StenShareObject;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.io.ByteArrayOutputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
-    String whichOne = null, key = null, bitString, currentDate, currentTime;
+    String whichOne = null, key = null, bitString, currentDate, currentTime, rPublicKey;
     StenShareObject obj = null;
     Bitmap bitmap = null;
+    private DBHelper mydb ;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     View v;
     public BottomSheetDialog(String whichOne){
@@ -82,7 +90,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     public interface BottomSheetListener {
         void onButtonClicked(String key, String message);
-        void onDecodeButtonClicked(String key);
+        void onDecodeButtonClicked(String key,int flag);
     }
 
     @Override
@@ -113,7 +121,22 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         decode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onDecodeButtonClicked(ecdc_key_et.getText().toString());
+                mListener.onDecodeButtonClicked(ecdc_key_et.getText().toString(),0);
+                dismiss();
+                try {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
+            }
+        });
+        MaterialButton biometrics = v.findViewById(R.id.bioDecodeBtn);
+        biometrics.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
+            @Override
+            public void onClick(View view) {
+                ((HomePage) getContext()).bioMetrics();
+                mListener.onDecodeButtonClicked(null,1);
                 dismiss();
             }
         });
@@ -132,12 +155,25 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
         stenSend.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                  currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                  currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-                 obj = new StenShareObject(bitString,key,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),email_et.getText().toString().trim(),currentDate,currentTime);
-                 db.collection("UserDetails").document(email_et.getText().toString().trim()).collection("StenShare").add(obj);
+                 db.collection("UserDetails").document(email_et.getText().toString().trim()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                     @Override
+                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                         rPublicKey = documentSnapshot.getString("publicKey");
+                         RSA objAlgo = new RSA(rPublicKey);
+                         try {
+                             obj = new StenShareObject(bitString,objAlgo.Encrypt(key,rPublicKey),FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),email_et.getText().toString().trim(),currentDate,currentTime);
+                             db.collection("UserDetails").document(email_et.getText().toString().trim()).collection("StenShare").add(obj);
+                         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidKeySpecException | NoSuchProviderException e) {
+                             e.printStackTrace();
+                         }
+                     }
+                 });
+
             }
         });
     }

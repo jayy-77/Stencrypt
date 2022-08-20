@@ -8,18 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-/*
-This class has methods used to compress and decompress encrypted message.
- */
+
 
 class Zipping {
 
     final static String TAG = Zipping.class.getName();
 
-    /*
-    @parameter : Encrypted message {String}
-    @return : Compressed byte array
-     */
 
     public static byte[] compress(String string) throws Exception {
 
@@ -37,10 +31,7 @@ class Zipping {
     }
 
 
-    /*
-    @parameter : byte array
-    @return : Uncompressed encrypted_message {String}
-     */
+
     public static String decompress(byte[] compressed) throws Exception {
 
         ByteArrayInputStream bis = new ByteArrayInputStream(compressed);

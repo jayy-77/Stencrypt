@@ -1,4 +1,4 @@
-package com.example.stencrypt;
+package com.example.stencrypt.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.stencrypt.R;
 import com.example.stencrypt.steganography.ImageSteganography;
 import com.example.stencrypt.steganography.TextEncoding;
 import com.example.stencrypt.steganography.TextEncodingCallback;

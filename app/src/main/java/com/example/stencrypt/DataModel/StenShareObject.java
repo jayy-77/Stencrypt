@@ -1,4 +1,4 @@
-package com.example.stencrypt;
+package com.example.stencrypt.DataModel;
 
 import java.util.ArrayList;
 import java.util.List;

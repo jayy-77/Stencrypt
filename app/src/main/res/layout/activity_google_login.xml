@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/loginLayout"
     android:background="#221F1E"
-    tools:context=".GoogleLoginActivity">
+    tools:context=".Activities.GoogleLoginActivity">
 
 
 

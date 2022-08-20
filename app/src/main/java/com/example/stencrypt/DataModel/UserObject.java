@@ -1,4 +1,4 @@
-package com.example.stencrypt;
+package com.example.stencrypt.DataModel;
 
 import android.net.Uri;
 

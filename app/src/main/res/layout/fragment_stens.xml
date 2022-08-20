@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StensFragment">
-   <com.google.android.material.progressindicator.LinearProgressIndicator
-       android:layout_width="match_parent"
+    tools:context=".Fragments.StensFragment">
+   <com.google.android.material.progressindicator.CircularProgressIndicator
+       android:layout_width="100dp"
        android:id="@+id/progressBar"
        android:visibility="visible"
        android:layout_gravity="center"
-       android:layout_height="wrap_content" />
+       android:layout_height="100dp" />
    <androidx.recyclerview.widget.RecyclerView
        android:visibility="gone"
        android:id="@+id/stendRecyler"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content"/>
+       android:layout_height="match_parent"/>
 
 </FrameLayout>

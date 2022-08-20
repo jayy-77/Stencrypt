@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context=".ProfilePage">
+    tools:context=".Activities.ProfilePage">
 
     <ImageView
         android:foregroundTint="@color/black"
