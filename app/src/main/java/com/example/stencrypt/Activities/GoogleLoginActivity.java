@@ -39,7 +39,7 @@ import com.google.firebase.ktx.Firebase;
 
 import java.security.NoSuchAlgorithmException;
 
-//arth
+//arth prajapati
 
 public class GoogleLoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
