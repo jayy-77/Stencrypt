@@ -39,7 +39,6 @@ import com.google.firebase.ktx.Firebase;
 
 import java.security.NoSuchAlgorithmException;
 
-//arth prajapati spekaing
 public class GoogleLoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
