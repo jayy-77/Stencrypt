@@ -27,6 +27,7 @@ import com.example.stencrypt.DataModel.StenShareObject;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -173,7 +174,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                          }
                      }
                  });
-
+            dismiss();
+                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Successfully Sent", Snackbar.LENGTH_LONG);
+                snackBar.show();
             }
         });
     }

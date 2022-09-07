@@ -55,8 +55,6 @@ public class RSA {
 
             byte[] byte_prikey = privateKey.getEncoded();
             pri_str_key = Base64.getEncoder().encodeToString(byte_prikey);
-
-
             byte [] byte_pubkey = publicKey.getEncoded();
             pub_str_key = Base64.getEncoder().encodeToString(byte_pubkey);
             String keyPair[] = new String[0];
